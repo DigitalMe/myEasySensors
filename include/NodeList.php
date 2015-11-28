@@ -18,19 +18,14 @@ include_once '../include/Node.php';
 class NodeList {
     
     private $nodeList = NULL;
-    private $availNodeIDs = NULL;
     private $db = NULL;
     private $userID = NULL;
 
     //put your code here
     function __construct($userID){
         $this->nodeList = new SplDoublyLinkedList();
-        $this->availNodeIDs = new SplDoublyLinkedList();
         $this->db = new DbHelper();
         $this->userID = $userID;
-        for ($index = 1; $index <= 254; $index++) {
-            $this->availNodeIDs->push($index);        
-        }
         
         $results = $this->db -> queryUserNodes($this->userID);
         if(isset($results)){
@@ -43,25 +38,19 @@ class NodeList {
     }
     
     function createNode($node){
-        if(!NULL == ($this->findNode($node))){
+        if(NULL == ($this->findNode($node->getID()))){
+            $this->db->insertNode($node);
             $this->addNode($node);
         }
     }
             
     function addNode($node){
         $this->nodeList->push($node);
-        $this->availNodeIDs->rewind();
-        while($this->availNodeIDs->current() && $node->getID() != $this->availNodeIDs->current()){
-            $this->availNodeIDs->next();
-        }
-        if($this->availNodeIDs->current()){
-            $this->availNodeIDs->shift();
-            $this->availNodeIDs->pop();
-        }
+
     }
     
     function removeNode($node){
-        $this->availNodeIDs->push($node->getID());
+        $this->availNodeIDs->attach($node->getID());
         $this->nodeList->rewind();
         while($this->nodeList->current() && $node != $this->nodeList->current()){
             $this->nodeList->next();
@@ -71,14 +60,13 @@ class NodeList {
         }
     }
     
-    function findNode($node){
+    function findNode($nodeID){
         $this->nodeList->rewind();
-        while($this->nodeList->valid() && $node->getID() != $this->nodeList->current()->getID()){
+        while($this->nodeList->valid() && $nodeID != $this->nodeList->current()->getID()){
             $this->nodeList->next();
         }
         if($this->nodeList->valid()){
             $node = $this->nodeList->current();
-            $this->nodeList->rewind();
             return $node;
         }
         return NULL;
@@ -96,18 +84,20 @@ class NodeList {
             $this->nodeList->next();
         }
         $table .= "\t\t\t<tr><td colspan='2'>"
-                . "<form>Node ID:"
-                    . "<select>";
-        $this->availNodeIDs->rewind();
-        while($this->availNodeIDs->valid()){
-            $table .= "<option value='".$this->availNodeIDs->current()."'>".$this->availNodeIDs->current()."</option>";
-            $this->availNodeIDs->next();
+                . "<form method='POST' action='".$style['http']."nodeList.php'>Node ID:"
+                    . "<select name='nodeId'>";
+        
+        for ($index = 1; $index <= 254; $index++) {
+            if(NULL == ($this->findNode($index))){
+                $table .= "<option value='".$index."'>".$index."</option>";
+            }
         }
 
         $table .=     "</select>"
-                    . "<textarea rows='3'></textarea>add node"
+                    . "<textarea name='notes' rows='3'></textarea><input type='submit' name='submit' value='add node'>"
                 . "</form></td><tr>\n";
         $table .="\t\t</table>\n";
         return $table;
     }
+    
 }

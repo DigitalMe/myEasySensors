@@ -17,25 +17,29 @@ class DbHelper {
     //put your code here
     private static $db;
     
-    private function query($sql) {
+    function __construct(){
+        if(!isset(self::$db)){
+            self::$db = new DB();
+        }
+    }   
+    
+    private function query($sql){
+        return self::$db->query($sql);
+    }
+
+    private function select($sql) {
         $results = self::$db->select($sql);
         if(!$results){
             $results = NULL;
         }
         return $results;
     }
-            
-    function __construct(){
-        if(!isset(self::$db)){
-            self::$db = new DB();
-        }
-    }
     
     public function queryUserLogin($userName, $password) {
         $sql = "SELECT * FROM Users "
              . "WHERE email = '$userName' AND "
              . "      password = PASSWORD('$password')";
-        return $this->query($sql);
+        return $this->select($sql);
     }
     
     public function queryUserNodes($UserID){
@@ -43,7 +47,7 @@ class DbHelper {
                 FROM     User_Nodes
                 WHERE    UserID   = $UserID
                 ORDER BY NodeID";
-        return $this->query($sql);
+        return $this->select($sql);
     }
     
     public function queryNodeSensors($UserID, $NodeID){
@@ -57,7 +61,7 @@ class DbHelper {
              . "WHERE ns.UserID = '$UserID'   AND "
                    . "ns.NodeID = '$NodeID' "
              . "ORDER BY ns.ChildID";
-        return $this->query($sql);
+        return $this->select($sql);
     }
     
     public function querySensor($UserID, $NodeID, $ChildID){
@@ -67,7 +71,7 @@ class DbHelper {
              . "WHERE ns.UserID   = '$UserID'   AND "
                    . "ns.NodeID   = '$NodeID'   AND "
                    . "ns.ChildID  = '$ChildID'";
-        return $this->query($sql);
+        return $this->select($sql);
     }
     
     public function queryPins($UserID, $NodeID, $ChildID){
@@ -77,6 +81,28 @@ class DbHelper {
                 WHERE sp.UserID   ='$UserID'   AND
                       sp.NodeID   ='$NodeID'   AND
                       sp.ChildID  ='$ChildID'";
-        return $this->query($sql);
+        return $this->select($sql);
+    }
+    
+    public function insertNode($node) {
+        $sql = "INSERT INTO `user_nodes`
+                VALUES (".$node->getUserID().", ".$node->getID().", '".$node->getNote()."')";
+        $this->query($sql);
+    }
+    
+    public function deleteNode($node){
+        //TODO delete the sensors on the node
+        $sql = "DELETE FROM `user_nodes` 
+                WHERE userID = ".$node->getUserID()."
+                      nodeID = ".$node->getID();
+        
+    }
+    
+    public function deleteSensor($sensor){
+        
+    }
+    
+    public function deletePin($pin){
+        
     }
 }

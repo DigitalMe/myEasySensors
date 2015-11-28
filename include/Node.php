@@ -15,25 +15,31 @@ include_once '../include/SensorList.php';
 
 class Node {
     private $sensorList = NULL;
+    private $userID;
     private $nodeID;
     private $note;
     //put your code here
     
     function __construct($userID, $nodeID){
         $this->nodeID = $nodeID;
+        $this->userID = $userID;
         $this->sensorList = new SensorList($userID, $nodeID);
     }
     
+    function getUserID() {
+        return $this->userID;
+    }
+
     function setNote($note){
         $this->note = $note;
     }
     
-    function getID(){
-        return $this->nodeID;
-    }
-    
     function getNote() {
         return $this->note;
+    }
+    
+    function getID(){
+        return $this->nodeID;
     }
     
     function addSensor($sensor){

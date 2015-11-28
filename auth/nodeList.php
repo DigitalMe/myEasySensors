@@ -6,16 +6,17 @@ and open the template in the editor.
 -->
 <?php
     session_start();
-    include('../include/nodeList.php');
+    include_once '../include/NodeList.php';
+    include_once '../include/Node.php';
+    
+    $nodeList = new nodeList($_SESSION['USER_ID']);
     
     if(!isset($_SESSION['USER_ID'])){
         header("Location: /myEasySensors/index.php");
         exit;
     }
 
-    function nodeTable(){
-
-        $nodeList = new nodeList($_SESSION['USER_ID']);
+    function nodeTable($nodeList){
         $removeButton = array("Image"    => "../images/minus.png",
                               "Class"    => "minus",
                               "Listener" => "onClick=(removeNode)");
@@ -37,7 +38,13 @@ and open the template in the editor.
         $db -> select($sql);
     }
     
-    $display_block = nodeTable();
+    if(filter_input(INPUT_POST, 'submit')){
+        $node = new Node($_SESSION['USER_ID'], filter_input(INPUT_POST, 'nodeId'));
+        $node->setNote(filter_input(INPUT_POST, 'notes'));
+        $nodeList->createNode($node);
+    }
+    
+    $display_block = nodeTable($nodeList);
 ?>
 <html>
     <head>
