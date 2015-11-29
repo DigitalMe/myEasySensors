@@ -90,7 +90,7 @@ class DbHelper {
         $this->query($sql);
     }
     
-    public function deleteNode($node, $userID){
+    public function deleteNode($node){
         $sql = "DELETE FROM `user_nodes` 
                 WHERE userID = ".$node->getUserID()." AND
                       nodeID = ".$node->getID();

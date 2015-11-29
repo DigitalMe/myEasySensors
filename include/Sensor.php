@@ -14,6 +14,7 @@
 include_once '../include/PinList.php';
 
 class Sensor {
+    private $ID = NULL;
     private $name = NULL;
     private $childID = NULL;
     private $vType = NULL;
@@ -28,6 +29,14 @@ class Sensor {
         $this->nodeID = $nodeID;
         $this->childID = $childID;
         $this->pinList = new PinList($userID, $nodeID, $childID);
+    }
+    
+    function setID($ID){
+        $this->ID = $ID;
+    }
+    
+    function getID(){
+        return $this->ID;
     }
     
     function setName($name){
