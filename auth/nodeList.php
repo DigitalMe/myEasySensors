@@ -37,8 +37,12 @@ and open the template in the editor.
              . "VALUES (" . $_SESSION['USER_ID'] . ", $nodeID, $note)";
         $db -> select($sql);
     }
-        var_dump($_POST);    
+    
     if(filter_input(INPUT_POST, 'submit')){
+        $action = filter_input(INPUT_POST, 'submit');
+        if($action == "removeNode"){
+            $nodeList->deleteNode(filter_input(INPUT_GET, "node"));
+        }
         $node = new Node($_SESSION['USER_ID'], filter_input(INPUT_POST, 'nodeId'));
         $node->setNote(filter_input(INPUT_POST, 'notes'));
         $nodeList->createNode($node);
@@ -50,7 +54,7 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title></title>
-    <link rel="stylesheet" type="text/css" href="../css/myEasySensors.css">
+        <link rel="stylesheet" type="text/css" href="../css/myEasySensors.css">
     </head>
     <body>
         <?php

@@ -22,7 +22,7 @@ class SensorList {
     private $nodeID = NULL;
  
     function __construct($userID, $nodeID){
-        $this->sensorList = new SplDoublyLinkedList();
+        $this->sensorList = new SplObjectStorage();
         $this->db = new dbhelper();
         $this->userID = $userID;
         $this->nodeID = $nodeID;
@@ -40,11 +40,14 @@ class SensorList {
     }
     
     function addSensor($sensor){
-        $this->sensorList->push($sensor);
+        $sucess = !$this->sensorList->contains($sensor);
+        if($sucess == TRUE){
+            $this->sensorList->attach($sensor);
+        }
+        return $sucess;
     }
             
     function printTable ($style){
-        $this->sensorList->rewind();
         $table = "<table class='sensor'>";
         if ($style['headers'] == TRUE){
             $table .= "<tr><th>Child ID</th><th>Name</th>";
@@ -53,10 +56,8 @@ class SensorList {
             }
             $table .= "</tr>";
         }
-        while($this->sensorList->valid()){
-            $sensor = $this->sensorList -> current();
+        foreach ($this->sensorList as $sensor) {
             $table .= $sensor->printRow($style, $this->nodeID);
-            $this->sensorList->next();
         }
         $table .= "<tr><td colspan='2'>add sensor</td></tr>";
         $table .="</table>";

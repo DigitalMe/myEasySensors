@@ -23,6 +23,7 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title></title>
+        <link rel="stylesheet" type="text/css" href="../css/myEasySensors.css">
     </head>
     <body>
         <?php

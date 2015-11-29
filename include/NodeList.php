@@ -46,8 +46,8 @@ class NodeList {
     
     function deleteNode($nodeID) {
         $node = $this->findNodeByID($nodeID);
-        $this->db->deleteNode($node);
         $this->removeNode($node);
+        $this->db->deleteNode($node);
     }
 
     function addNode($node){
@@ -77,27 +77,22 @@ class NodeList {
         return NULL;
     }
     
-    function printTable($style){       
-        $this->nodeList->rewind();
+    function printTable($style){
         $table = "<table class='nodeList'>\n";
         if ($style['headers'] == TRUE){
             $table .= "\t\t\t<tr><th>Node ID</th><th>Node Details</th><th>Notes</th></tr>\n";
         }
-        while($this->nodeList->valid()){
-            $node = $this->nodeList -> current();
+        foreach ($this->nodeList as $node) {
             $table .= "\t\t\t".$node->printRow($style);
-            $this->nodeList->next();
         }
         $table .= "\t\t\t<tr><td colspan='2'>"
                 . "<form method='POST' action='".$style['http']."nodeList.php'>Node ID:"
                     . "<select name='nodeId'>";
-        
         for ($index = 1; $index <= 254; $index++) {
             if(NULL == ($this->findNodeByID($index))){
                 $table .= "<option value='".$index."'>".$index."</option>";
             }
         }
-
         $table .=     "</select>"
                     . "<textarea name='notes' rows='3'></textarea><input type='submit' name='submit' value='add node'>"
                 . "</form></td><tr>\n";

@@ -84,7 +84,10 @@ class Sensor {
         
         if (isset($style['http'])){
             $addressPath = $style['http'];
-                $row .= "<td><a href='".$addressPath."sensor.php?node=$this->nodeID&child=".$this->getChildID()."'>".$this->getChildID()."</a></td>";
+                $row .= "<td><form method='POST' action='".$style['http']."node.php?node=$this->nodeID&child=".$this->getChildID()."'>"
+                        . "<a href='".$addressPath."sensor.php?node=$this->nodeID&child=".$this->getChildID()."'>".$this->getChildID()."</a>"
+                        . "<input type='submit' name='submit' value='removeNode' class='removeNodeButton' />"
+                     . "</form></td>";
         } else {
             $row .= "<td>".$this->getID()."</td>";
         }
