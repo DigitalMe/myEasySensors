@@ -63,7 +63,12 @@ class DbHelper {
              . "ORDER BY ns.ChildID";
         return $this->select($sql);
     }
-    
+
+    public function queryAllSensors(){
+        $sql = "SELECT * FROM `sensors`";
+        return $this->select($sql);
+    }
+        
     public function querySensor($UserID, $NodeID, $ChildID){
         $sql = "SELECT ns.ChildID "
              . "FROM node_sensors ns "
@@ -88,6 +93,16 @@ class DbHelper {
         $sql = "INSERT INTO `user_nodes`
                 VALUES (".$node->getUserID().", ".$node->getID().", '".$node->getNote()."')";
         $this->query($sql);
+    }
+    
+    public function insertSensor($sensor) {
+        $sql = "INSERT INTO `node_sensors`
+                VALUES (".$sensor->getUserID().   ", "
+                         .$sensor->getNodeID().   ", "
+                         .$sensor->getID().       ", "
+                         .$sensor->getChildID().  ", "
+                         ."'".$sensor->getNote().     "')";
+        return $this->query($sql);
     }
     
     public function deleteNode($node){

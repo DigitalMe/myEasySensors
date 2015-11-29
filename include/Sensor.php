@@ -19,10 +19,11 @@ class Sensor {
     private $childID = NULL;
     private $vType = NULL;
     private $sType = NULL;
+    private $note = NULL;
     private $pinList = NULL;
     private $userID = NULL;
     private $nodeID = NULL;
-
+    
     function __construct($userID, $nodeID, $childID){
         $this->userID = $userID;
         $this->nodeID = $nodeID;
@@ -30,6 +31,14 @@ class Sensor {
         $this->pinList = new PinList($userID, $nodeID, $childID);
     }
     
+    function getNote() {
+        return $this->note;
+    }
+
+    function setNote($note) {
+        $this->note = $note;
+    }
+
     function setID($ID){
         $this->ID = $ID;
     }

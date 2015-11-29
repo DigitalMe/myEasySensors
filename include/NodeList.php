@@ -87,7 +87,7 @@ class NodeList {
             $table .= "\t\t\t".$node->printRow($style);
         }
         $table .= "\t\t\t<tr><td colspan='2'>"
-                . "<form method='POST' action='".$style['http']."nodeList.php'>Node ID:"
+                . "<form method='POST' action='".$style['http'].$style['page']."'>Node ID:"
                     . "<select name='nodeId'>";
         for ($index = 1; $index <= 254; $index++) {
             if(NULL == ($this->findNodeByID($index))){

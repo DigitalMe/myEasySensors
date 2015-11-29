@@ -34,12 +34,12 @@ class SensorList {
                 $sensor->setID($row["SensorID"]);
                 $sensor->setName($row["SensorName"]);
                 $sensor->setType($row["VType"], $row["SType"]);
-                $this->addSensor($sensor);
+                $this->attachSensor($sensor);
             }
         }
     }
     
-    function addSensor($sensor){
+    function attachSensor($sensor){
         $sucess = !$this->sensorList->contains($sensor);
         if($sucess == TRUE){
             $this->sensorList->attach($sensor);
@@ -52,6 +52,13 @@ class SensorList {
             $sensor->deleteAllPins();
             $this->sensorList->detach($sensor);
             $this->db->deleteSensor($sensor);   
+        }
+    }
+    
+    function addSensor($sensor){
+        if(NULL == ($this->findSensorById($sensor->getChildID()))){
+            $this->db->insertSensor($sensor);
+            $this->attachSensor($sensor);
         }
     }
     
@@ -81,6 +88,31 @@ class SensorList {
         return NULL;
     }
     
+    function printChildIDsSelect() {
+        $select = "<select name='childID'>";
+        for ($index = 0; $index <= 254; $index++) {
+            if(NULL == ($this->findSensorById($index))){
+                $select .= "<option value='".$index."'>".$index."</option>";
+            }
+        }
+        $select .=     "</select>";
+        return $select;        
+    }
+    
+    function printSensorSelect() {
+        $select = "<select name='sensor'>";
+        $results = $this->db->queryAllSensors();
+        if(isset($results)){
+            foreach ($results as $row){
+                if($row["SensorID"] != 0){
+                    $select .= "<option value='".$row["SensorID"]."'>".$row["SensorName"]."</option>";
+                }
+            }
+        }
+        $select .=     "</select>";
+        return $select;
+    }
+    
     function printTable ($style){
         $table = "<table class='sensor'>";
         if ($style['headers'] == TRUE){
@@ -93,7 +125,11 @@ class SensorList {
         foreach ($this->sensorList as $sensor) {
             $table .= $sensor->printRow($style, $this->nodeID);
         }
-        $table .= "<tr><td colspan='2'>add sensor</td></tr>";
+        $table .= "<tr><td colspan='2'><form method='POST' action='".$style['http'].$style['page']."?node=$this->nodeID'>Child ID:"
+                    . $this->printChildIDsSelect()
+                    . $this->printSensorSelect()
+                    . "<textarea name='notes' rows='3'></textarea><input type='submit' name='submit' value='addSensor' />"
+                . "</form></td></tr>";
         $table .="</table>";
         return $table;
     }

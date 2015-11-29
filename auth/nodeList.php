@@ -8,6 +8,10 @@ and open the template in the editor.
     session_start();
     include_once '../include/NodeList.php';
     include_once '../include/Node.php';
+    include_once '../include/SensorList.php';
+    include_once '../include/Sensor.php';
+    
+    var_dump($_POST);
     
     $nodeList = new nodeList($_SESSION['USER_ID']);
     
@@ -57,6 +61,14 @@ and open the template in the editor.
                 $node = new Node($_SESSION['USER_ID'], filter_input(INPUT_POST, 'nodeId'));
                 $node->setNote(filter_input(INPUT_POST, 'notes'));
                 $nodeList->createNode($node);
+                break;
+            case "addSensor":
+                $childID = filter_input(INPUT_POST, "childID");
+                $node = $nodeList->findNodeByID($nodeID);
+                $sensor = new Sensor($_SESSION['USER_ID'], $nodeID, $childID);
+                $sensor->setID(filter_input(INPUT_POST, "sensor"));
+                $sensor->setNote(filter_input(INPUT_POST, "notes"));
+                $node->addSensor($sensor);
                 break;
             default:
                 break;
