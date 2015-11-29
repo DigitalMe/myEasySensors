@@ -50,14 +50,35 @@ class SensorList {
     function deleteAllSensors() {
         foreach ($this->sensorList as $sensor) {
             $sensor->deleteAllPins();
+            $this->sensorList->detach($sensor);
+            $this->db->deleteSensor($sensor);   
         }
     }
     
-    function removeSensor($sensor){
-        $sucess = $this->sensorList->contains($sensor);
-        if($sucess == TRUE){
-            $this->sensorList->detach($sensor);
+    function deleteSensor($childID) {
+        $sucess = FALSE;
+        $sensor = $this->findSensorById($childID);
+        if (isset($sensor)) {
+            $sucess = $this->sensorList->contains($sensor);
+            if($sucess == TRUE){
+                $sensor->deleteAllPins();
+                $this->db->deleteSensor($sensor);            
+                $this->sensorList->detach($sensor);
+            }
         }
+        return $sucess;
+    }
+    
+    function findSensorById($childID) {
+        $this->sensorList->rewind();
+        while($this->sensorList->valid() && $childID != $this->sensorList->current()->getChildID()){
+            $this->sensorList->next();
+        }
+        if($this->sensorList->valid()){
+            $node = $this->sensorList->current();
+            return $node;
+        }
+        return NULL;
     }
     
     function printTable ($style){

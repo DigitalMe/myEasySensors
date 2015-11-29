@@ -22,8 +22,7 @@ class Sensor {
     private $pinList = NULL;
     private $userID = NULL;
     private $nodeID = NULL;
-    
-    //put your code here
+
     function __construct($userID, $nodeID, $childID){
         $this->userID = $userID;
         $this->nodeID = $nodeID;
@@ -67,14 +66,38 @@ class Sensor {
     function getChildID() {
         return $this->childID;
     }
+
+    function getNodeID() {
+        return $this->nodeID;
+    }
+
+    function getUserID() {
+        return $this->userID;
+    }
     
     function deleteAllPins() {
         $this->pinList->deleteAllPins();
     }
     
+    function deletePin($pinID){
+        
+    }
+    
     function addPin($pin){}
     
     function removePin($pin){}
+    
+    function findPinById($pinID) {
+        $this->pinList->rewind();
+        while($this->pinList->valid() && $pinID != $this->pinList->current()->getId()){
+            $this->pinList->next();
+        }
+        if($this->pinList->valid()){
+            $pin = $this->pinList->current();
+            return $pin;
+        }
+        return NULL;
+    }
     
     function printTable($style){
         $table = "<table class='sensor'>";
@@ -88,9 +111,10 @@ class Sensor {
         
         if (isset($style['http'])){
             $addressPath = $style['http'];
-            $row .= "<td><form method='POST' action='".$style['http']."node.php?node=$this->nodeID&child=".$this->getChildID()."'>"
+            $page = $style['page'];
+            $row .= "<td><form method='POST' action='".$style['http'].$page."?node=$this->nodeID&child=".$this->getChildID()."'>"
                 . "<a href='".$addressPath."sensor.php?node=$this->nodeID&child=".$this->getChildID()."'>".$this->getChildID()."</a>"
-                . "<input type='submit' name='submit' value='removeNode' class='removeSensorButton' />"
+                . "<input type='submit' name='submit' value='removeSensor' class='removeSensorButton' />"
              . "</form></td>";
         } else {
             $row .= "<td>".$this->getChildID()."</td>";

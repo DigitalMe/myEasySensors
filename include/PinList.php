@@ -43,9 +43,7 @@ class PinList {
     }
     
     function deleteAllPins() {
-        foreach ($this->pinList as $pin) {
-            $this->db->deleteAllSensorPins($this->userID, $this->nodeID, $this->childID);
-        }
+        $this->db->deleteAllSensorPins($this->userID, $this->nodeID, $this->childID);
     }
     
     function addPin($pin){

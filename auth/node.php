@@ -15,7 +15,8 @@ and open the template in the editor.
     $nodeID =  filter_input(INPUT_GET, 'node');
     $style = array("headers" => TRUE,
                    "details" => "long",
-                   "http"    => "./");
+                   "http"    => "./",
+                   "page"    => "node.php");
     $sensorList = new sensorList($userID, $nodeID);
     
 ?>

@@ -98,23 +98,23 @@ class DbHelper {
     }
     
     public function deleteSensor($sensor){
-        $sql = "DELETE FROM `nodes_sensors` 
+        $sql = "DELETE FROM `node_sensors` 
                 WHERE userID  = ".$sensor->getUserID()." AND
-                      nodeID  = ".$sensor->getID()."     AND
+                      nodeID  = ".$sensor->getNodeID()." AND
                       childID = ".$sensor->getChildID(); 
         return $this->query($sql);
     }
     
     public function deleteAllSensorPins($userID, $nodeID, $childID) {
         $sql = "DELETE FROM `set_pins` 
-                WHERE userID  = ".$userID()." AND
-                      nodeID  = ".$nodeID()." AND
-                      childID = ".$childID();
+                WHERE userID  = ".$userID." AND
+                      nodeID  = ".$nodeID." AND
+                      childID = ".$childID;
         return $this->query($sql);    }
     
     public function deletePin($pin, $userID, $nodeID, $childID){
         $sql = "DELETE FROM `set_pins` 
-                WHERE userID    = ".$userID()."         AND
+                WHERE userID    = ".$userID."           AND
                       nodeID    = ".$nodeID."           AND
                       childID   = ".$childID."          AND
                       pinNumber = ".$pin->getNumber();

@@ -26,7 +26,8 @@ and open the template in the editor.
         
         $style = array("headers" => TRUE,
                        "details" => "short",
-                       "http"    => "./");
+                       "http"    => "./",
+                       "page"    => "nodeList.php");
         return $nodeList->printTable($style);
 
     }
@@ -40,12 +41,25 @@ and open the template in the editor.
 
     if(filter_input(INPUT_POST, 'submit')){
         $action = filter_input(INPUT_POST, 'submit');
-        if($action == "removeNode"){
-            $nodeList->deleteNode(filter_input(INPUT_GET, "node"));
-        } elseif ($action == "addNode") {
-            $node = new Node($_SESSION['USER_ID'], filter_input(INPUT_POST, 'nodeId'));
-            $node->setNote(filter_input(INPUT_POST, 'notes'));
-            $nodeList->createNode($node);
+        $nodeID = filter_input(INPUT_GET, "node");
+        switch ($action) {
+            case "removeNode":
+                $nodeList->deleteNode($nodeID);
+                break;
+            case "removeSensor":
+                $childID = filter_input(INPUT_GET, "child");
+                $node = $nodeList->findNodeByID($nodeID);
+                if(isset($node)){
+                    $node->deleteSensor($childID);
+                }
+                break;
+            case "addNode":
+                $node = new Node($_SESSION['USER_ID'], filter_input(INPUT_POST, 'nodeId'));
+                $node->setNote(filter_input(INPUT_POST, 'notes'));
+                $nodeList->createNode($node);
+                break;
+            default:
+                break;
         }
     }
     

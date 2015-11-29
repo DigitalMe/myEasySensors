@@ -46,6 +46,10 @@ class Node {
         $this->sensorList->deleteAllSensors();
     }
     
+    function deleteSensor($childID) {
+        $this->sensorList->deleteSensor($childID);
+    }
+    
     function addSensor($sensor){
         $this->sensorList -> push ($sensor);
     }
@@ -54,11 +58,16 @@ class Node {
         $this->sensorList->removeSensor($sensor);
     }
     
+    function findSensorById($sensorID) {
+        $this->sensorList->findSensorById($sensorID);
+    }
+    
     function printRow($style) {
            $row = "<tr class='node'>";
            if (isset($style['http'])){
                 $addressPath = $style['http'];
-                $row .= "<td><form method='POST' action='".$style['http']."nodeList.php?node=".$this->getID()."'>"
+                $page = $style['page'];
+                $row .= "<td><form method='POST' action='".$style['http'].$page."?node=".$this->getID()."'>"
                             . "<a href='".$addressPath."node.php?node=".$this->getID()."'>".$this->getID()."</a>"
                             . "<input type='submit' name='submit' value='removeNode' class='removeNodeButton' />"
                         . "</form></td>";
