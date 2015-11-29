@@ -37,7 +37,7 @@ and open the template in the editor.
              . "VALUES (" . $_SESSION['USER_ID'] . ", $nodeID, $note)";
         $db -> select($sql);
     }
-    
+        var_dump($_POST);    
     if(filter_input(INPUT_POST, 'submit')){
         $node = new Node($_SESSION['USER_ID'], filter_input(INPUT_POST, 'nodeId'));
         $node->setNote(filter_input(INPUT_POST, 'notes'));
@@ -50,13 +50,7 @@ and open the template in the editor.
     <head>
         <meta charset="UTF-8">
         <title></title>
-        <style type="text/css">
-            table, td, th { color:  blue;
-                            border: 1px solid black;
-                            text-align: right;}
-            img.minus { height: 1em;
-                        width:  1em}
-    </style>
+    <link rel="stylesheet" type="text/css" href="../css/myEasySensors.css">
     </head>
     <body>
         <?php

@@ -60,7 +60,10 @@ class Node {
            $row = "<tr class='node'>";
            if (isset($style['http'])){
                 $addressPath = $style['http'];
-                $row .= "<td><a href='".$addressPath."node.php?node=".$this->getID()."'>".$this->getID()."</a></td>";
+                $row .= "<td><form method='POST' action='".$style['http']."nodeList.php?node=".$this->getID()."'>"
+                            . "<a href='".$addressPath."node.php?node=".$this->getID()."'>".$this->getID()."</a>"
+                            . "<input type='submit' name='submit' value='removeNode' class='removeNodeButton' />"
+                        . "</form></td>";
             } else {
                 $row .= "<td>".$this->getID()."</td>";
             }

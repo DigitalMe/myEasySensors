@@ -1,0 +1,23 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : 28-Nov-2015, 8:27:48 PM
+    Author     : z
+*/
+            
+table, td, th { color:  blue;
+                border: 1px solid black;
+                text-align: right;}
+
+.removeNodeButton {
+    background: url(../images/minus.png) no-repeat;
+    background-size: 1em 1em;
+    color: transparent;
+    padding: 0;
+    border: none;
+    height: 1em;
+    width:  1em;
+}

@@ -23,7 +23,7 @@ class NodeList {
 
     //put your code here
     function __construct($userID){
-        $this->nodeList = new SplDoublyLinkedList();
+        $this->nodeList = new SplObjectStorage();
         $this->db = new DbHelper();
         $this->userID = $userID;
         
@@ -38,29 +38,34 @@ class NodeList {
     }
     
     function createNode($node){
-        if(NULL == ($this->findNode($node->getID()))){
+        if(NULL == ($this->findNodeByID($node->getID()))){
             $this->db->insertNode($node);
             $this->addNode($node);
         }
     }
-            
-    function addNode($node){
-        $this->nodeList->push($node);
+    
+    function deleteNode($nodeID) {
+        $node = $this->findNodeByID($nodeID);
+        $this->db->deleteNode($node);
+        $this->removeNode($node);
+    }
 
+    function addNode($node){
+        $sucess = !$this->nodeList->contains($node);
+        if($sucess == TRUE){
+            $this->nodeList->attach($node);
+        }
+        return $sucess;
     }
     
     function removeNode($node){
-        $this->availNodeIDs->attach($node->getID());
-        $this->nodeList->rewind();
-        while($this->nodeList->current() && $node != $this->nodeList->current()){
-            $this->nodeList->next();
-        }
-        if($this->nodeList->current()){
-            $this->nodeList->pop();
+        $sucess = $this->nodeList->contains($node);
+        if($sucess == TRUE){
+            $this->nodeList->detach($node);
         }
     }
     
-    function findNode($nodeID){
+    function findNodeByID($nodeID){
         $this->nodeList->rewind();
         while($this->nodeList->valid() && $nodeID != $this->nodeList->current()->getID()){
             $this->nodeList->next();
@@ -88,7 +93,7 @@ class NodeList {
                     . "<select name='nodeId'>";
         
         for ($index = 1; $index <= 254; $index++) {
-            if(NULL == ($this->findNode($index))){
+            if(NULL == ($this->findNodeByID($index))){
                 $table .= "<option value='".$index."'>".$index."</option>";
             }
         }

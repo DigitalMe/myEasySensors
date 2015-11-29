@@ -23,7 +23,7 @@ class PinList {
     private $childID = NULL;
  
     function __construct($userID, $nodeID, $childID){
-        $this->pinList = new SplDoublyLinkedList();
+        $this->pinList = new SplObjectStorage();
         $this->db = new dbhelper();
         $this->userID = $userID;
         $this->nodeID = $nodeID;
@@ -43,21 +43,30 @@ class PinList {
     }
     
     function addPin($pin){
-        $this->pinList->push($pin);
+        $sucess = !$this->pinList->contains($pin);
+        if($sucess == TRUE){
+            $this->pinList->attach($pin);
+        }
+        return $sucess;
     }
     
+    function removePin($pin){
+        $sucess = $this->pinList->contains($pin);
+        if($sucess == TRUE){
+            $this->pinList->detach($pin);
+        }
+        return $sucess;
+    }
+            
     function printTable ($style){
-        $this->pinList->rewind();
         $table = "<table class='pinList'>";
         $style['headers'] = FALSE;
         if ($style['headers'] == TRUE){
             $table .= "<tr><th>Adress</th><th>Mode</th><th>Type</th>";
             $table .= "</tr>";
         }
-        while($this->pinList->valid()){
-            $pin = $this->pinList -> current();
+        foreach ($this->pinList as $pin) {
             $table .= $pin->printRow($style);
-            $this->pinList->next();
         }
         $table .= "<tr><td colspan='2'>add pin</td></tr>";
         $table .="</table>";
