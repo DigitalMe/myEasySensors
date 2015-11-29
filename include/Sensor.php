@@ -14,7 +14,6 @@
 include_once '../include/PinList.php';
 
 class Sensor {
-    private $ID = NULL;
     private $name = NULL;
     private $childID = NULL;
     private $vType = NULL;
@@ -29,14 +28,6 @@ class Sensor {
         $this->nodeID = $nodeID;
         $this->childID = $childID;
         $this->pinList = new PinList($userID, $nodeID, $childID);
-    }
-    
-    function setID($ID){
-        $this->ID = $ID;
-    }
-    
-    function getID(){
-        return $this->ID;
     }
     
     function setName($name){
@@ -68,6 +59,10 @@ class Sensor {
         return $this->childID;
     }
     
+    function deleteAllPins() {
+        $this->pinList->deleteAllPins();
+    }
+    
     function addPin($pin){}
     
     function removePin($pin){}
@@ -84,12 +79,12 @@ class Sensor {
         
         if (isset($style['http'])){
             $addressPath = $style['http'];
-                $row .= "<td><form method='POST' action='".$style['http']."node.php?node=$this->nodeID&child=".$this->getChildID()."'>"
-                        . "<a href='".$addressPath."sensor.php?node=$this->nodeID&child=".$this->getChildID()."'>".$this->getChildID()."</a>"
-                        . "<input type='submit' name='submit' value='removeNode' class='removeNodeButton' />"
-                     . "</form></td>";
+            $row .= "<td><form method='POST' action='".$style['http']."node.php?node=$this->nodeID&child=".$this->getChildID()."'>"
+                . "<a href='".$addressPath."sensor.php?node=$this->nodeID&child=".$this->getChildID()."'>".$this->getChildID()."</a>"
+                . "<input type='submit' name='submit' value='removeNode' class='removeSensorButton' />"
+             . "</form></td>";
         } else {
-            $row .= "<td>".$this->getID()."</td>";
+            $row .= "<td>".$this->getChildID()."</td>";
         }
         $row .= "<td>".$this->getName()."</td>";
         if($style['details'] == "long"){

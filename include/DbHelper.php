@@ -90,29 +90,34 @@ class DbHelper {
         $this->query($sql);
     }
     
-    public function deleteNode($node){
-        //TODO delete the sensors on the node
+    public function deleteNode($node, $userID){
         $sql = "DELETE FROM `user_nodes` 
                 WHERE userID = ".$node->getUserID()." AND
                       nodeID = ".$node->getID();
-        $this->query($sql);
+        return $this->query($sql);
     }
     
     public function deleteSensor($sensor){
-        //TODO delete the pins for the sensor
-        
         $sql = "DELETE FROM `nodes_sensors` 
                 WHERE userID  = ".$sensor->getUserID()." AND
                       nodeID  = ".$sensor->getID()."     AND
                       childID = ".$sensor->getChildID(); 
-        $this->query($sql);
+        return $this->query($sql);
     }
     
-    public function deletePin($pin){
-        $sql = "DELETE FROM `nodes_sensors` 
-                WHERE userID  = ".$pin->getUserID()." AND
-                      nodeID  = ".$pin->getID()."     AND
-                      childID = ".$pin->getChildID();
-        $this->query($sql);
+    public function deleteAllSensorPins($userID, $nodeID, $childID) {
+        $sql = "DELETE FROM `set_pins` 
+                WHERE userID  = ".$userID()." AND
+                      nodeID  = ".$nodeID()." AND
+                      childID = ".$childID();
+        return $this->query($sql);    }
+    
+    public function deletePin($pin, $userID, $nodeID, $childID){
+        $sql = "DELETE FROM `set_pins` 
+                WHERE userID    = ".$userID()."         AND
+                      nodeID    = ".$nodeID."           AND
+                      childID   = ".$childID."          AND
+                      pinNumber = ".$pin->getNumber();
+        return $this->query($sql);
     }
 }

@@ -42,18 +42,16 @@ class PinList {
         }
     }
     
+    function deleteAllPins() {
+        foreach ($this->pinList as $pin) {
+            $this->db->deleteAllSensorPins($this->userID, $this->nodeID, $this->childID);
+        }
+    }
+    
     function addPin($pin){
         $sucess = !$this->pinList->contains($pin);
         if($sucess == TRUE){
             $this->pinList->attach($pin);
-        }
-        return $sucess;
-    }
-    
-    function removePin($pin){
-        $sucess = $this->pinList->contains($pin);
-        if($sucess == TRUE){
-            $this->pinList->detach($pin);
         }
         return $sucess;
     }

@@ -42,18 +42,16 @@ class Node {
         return $this->nodeID;
     }
     
+    function deleteAllSensors() {
+        $this->sensorList->deleteAllSensors();
+    }
+    
     function addSensor($sensor){
         $this->sensorList -> push ($sensor);
     }
     
     function removeSensor($sensor){
-        $this->sensorList -> rewind();
-        while($this->sensorList -> current() && $sensor != $this->sensorList -> current()){
-            $this->sensorList -> next();
-        }
-        if(!$this->sensorList -> current()){
-            $this->sensorList -> pop();
-        }
+        $this->sensorList->removeSensor($sensor);
     }
     
     function printRow($style) {

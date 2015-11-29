@@ -45,9 +45,17 @@ class NodeList {
     }
     
     function deleteNode($nodeID) {
+        $sucess = FALSE;
         $node = $this->findNodeByID($nodeID);
-        $this->removeNode($node);
-        $this->db->deleteNode($node);
+        if (isset($node)) {
+            $sucess = $this->nodeList->contains($node);
+            if($sucess == TRUE){
+                $node->deleteAllSensors();
+                $this->nodeList->detach($node);
+                $this->db->deleteNode($node);            
+            }
+        }
+        return $sucess;
     }
 
     function addNode($node){
@@ -56,13 +64,6 @@ class NodeList {
             $this->nodeList->attach($node);
         }
         return $sucess;
-    }
-    
-    function removeNode($node){
-        $sucess = $this->nodeList->contains($node);
-        if($sucess == TRUE){
-            $this->nodeList->detach($node);
-        }
     }
     
     function findNodeByID($nodeID){
@@ -94,7 +95,7 @@ class NodeList {
             }
         }
         $table .=     "</select>"
-                    . "<textarea name='notes' rows='3'></textarea><input type='submit' name='submit' value='add node'>"
+                    . "<textarea name='notes' rows='3'></textarea><input type='submit' name='submit' value='addNode' />"
                 . "</form></td><tr>\n";
         $table .="\t\t</table>\n";
         return $table;

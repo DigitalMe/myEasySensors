@@ -37,15 +37,16 @@ and open the template in the editor.
              . "VALUES (" . $_SESSION['USER_ID'] . ", $nodeID, $note)";
         $db -> select($sql);
     }
-    
+
     if(filter_input(INPUT_POST, 'submit')){
         $action = filter_input(INPUT_POST, 'submit');
         if($action == "removeNode"){
             $nodeList->deleteNode(filter_input(INPUT_GET, "node"));
+        } elseif ($action == "addNode") {
+            $node = new Node($_SESSION['USER_ID'], filter_input(INPUT_POST, 'nodeId'));
+            $node->setNote(filter_input(INPUT_POST, 'notes'));
+            $nodeList->createNode($node);
         }
-        $node = new Node($_SESSION['USER_ID'], filter_input(INPUT_POST, 'nodeId'));
-        $node->setNote(filter_input(INPUT_POST, 'notes'));
-        $nodeList->createNode($node);
     }
     
     $display_block = nodeTable($nodeList);

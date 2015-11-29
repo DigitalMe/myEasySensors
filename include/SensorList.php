@@ -46,7 +46,20 @@ class SensorList {
         }
         return $sucess;
     }
-            
+    
+    function deleteAllSensors() {
+        foreach ($this->sensorList as $sensor) {
+            $sensor->deleteAllPins();
+        }
+    }
+    
+    function removeSensor($sensor){
+        $sucess = $this->sensorList->contains($sensor);
+        if($sucess == TRUE){
+            $this->sensorList->detach($sensor);
+        }
+    }
+    
     function printTable ($style){
         $table = "<table class='sensor'>";
         if ($style['headers'] == TRUE){

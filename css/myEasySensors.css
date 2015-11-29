@@ -8,11 +8,13 @@ and open the template in the editor.
     Author     : z
 */
             
-table, td, th { color:  blue;
-                border: 1px solid black;
-                text-align: right;}
+table, td, th {
+    color:  blue;
+    border: 1px solid black;
+    text-align: right;
+}
 
-.removeNodeButton {
+.removeNodeButton, .removeSensorButton {
     background: url(../images/minus.png) no-repeat;
     background-size: 1em 1em;
     color: transparent;
