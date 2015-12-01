@@ -51,13 +51,9 @@ class DbHelper {
     }
     
     public function queryNodeSensors($UserID, $NodeID){
-        $sql = "SELECT ns.ChildID, s.*, sp.PinNumber, p.* "
+        $sql = "SELECT ns.ChildID, s.* "
              . "FROM node_sensors ns "
              . "INNER JOIN sensors s  ON ns.SensorID   = s.SensorID "
-             . "LEFT JOIN set_pins sp ON ns.UserID     = sp.UserID   AND "
-                                      . "ns.NodeID     = sp.NodeID   AND "
-                                      . "ns.ChildID    = sp.ChildID "
-             . "LEFT JOIN pins p      ON sp.PinID      = p.PinID "
              . "WHERE ns.UserID = '$UserID'   AND "
                    . "ns.NodeID = '$NodeID' "
              . "ORDER BY ns.ChildID";
@@ -70,27 +66,24 @@ class DbHelper {
     }
         
     public function querySensor($UserID, $NodeID, $ChildID){
-        $sql = "SELECT ns.ChildID "
-             . "FROM node_sensors ns "
-             . "INNER JOIN sensors s ON ns.SensorID   = s.SensorID "
-             . "WHERE ns.UserID   = '$UserID'   AND "
-                   . "ns.NodeID   = '$NodeID'   AND "
-                   . "ns.ChildID  = '$ChildID'";
+        $sql = "SELECT DISTINCT ns.*, sp.pinNumber
+                FROM node_sensors ns
+                LEFT JOIN sensor_pins sp ON ns.SensorID = sp.SensorID
+                WHERE ns.UserID  = $UserID  AND
+                      ns.NodeID  = $NodeID  AND
+                      ns.ChildID = $ChildID";
         return $this->select($sql);
     }
     
-    public function queryPossiblePins($sensorID) {
-        $sql = "SELECT sp.PinNumber, p.*
-                FROM sensor_pins sp
-                INNER JOIN pins p ON sp.pinID = p.pinID
-                WHERE sp.sensorID = $sensorID";
-        return $this->select($sql);
-    }
-    
-    public function querySetPins($UserID, $NodeID, $ChildID){
-        $sql = "SELECT sp.PinNumber, p.*
-                FROM set_pins sp
-                INNER JOIN pins p ON sp.PinID = p.PinID
+    public function querySensorPins($UserID, $NodeID, $ChildID){
+        $sql = "SELECT sp.pinNumber, sp.SensorPinID, p.*, IF(IFNULL(setp.SensorPinID, FALSE), TRUE, FALSE) AS SetPin
+                FROM node_sensors ns
+                INNER JOIN sensor_pins sp ON sp.SensorID = ns.SensorID
+                INNER JOIN pins p         ON sp.PinID    = p.PinID
+                LEFT  JOIN set_pins setp  ON ns.UserID      = setp.UserID      AND
+                                             ns.NodeID      = setp.NodeID      AND
+                                             ns.ChildID     = setp.ChildID     AND
+                                             sp.SensorPinID = setp.SensorPinID
                 WHERE sp.UserID   ='$UserID'   AND
                       sp.NodeID   ='$NodeID'   AND
                       sp.ChildID  ='$ChildID'";

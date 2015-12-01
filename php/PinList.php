@@ -37,7 +37,7 @@ class PinList {
                 $this->possiblePins[$row['PinNumber']][$row['PinID']] = $row['Address'];
             }
         }
-        $results = $this->db ->querySetPins($this->userID, $nodeID, $childID);
+/*        $results = $this->db ->querySetPins($this->userID, $nodeID, $childID);
         if(isset($results)){
             foreach ($results as $row){
                 $pin = new Pin();
@@ -48,7 +48,7 @@ class PinList {
                 $pin->setType($row["Type"]);
                 $this->addPin($pin);
             }
-        }
+        }*/
     }
     
     function setSensorID($sensorID) {
