@@ -11,7 +11,7 @@
  *
  * @author ian
  */
-include_once '../include/SensorList.php';
+include_once '../php/SensorList.php';
 
 class Node {
     private $sensorList = NULL;

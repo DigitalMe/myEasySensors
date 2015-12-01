@@ -53,11 +53,11 @@ class DbHelper {
     public function queryNodeSensors($UserID, $NodeID){
         $sql = "SELECT ns.ChildID, s.*, sp.PinNumber, p.* "
              . "FROM node_sensors ns "
-             . "INNER JOIN sensors s  on ns.SensorID   = s.SensorID "
-             . "LEFT JOIN set_pins sp on ns.UserID     = sp.UserID   AND "
+             . "INNER JOIN sensors s  ON ns.SensorID   = s.SensorID "
+             . "LEFT JOIN set_pins sp ON ns.UserID     = sp.UserID   AND "
                                       . "ns.NodeID     = sp.NodeID   AND "
                                       . "ns.ChildID    = sp.ChildID "
-             . "LEFT JOIN pins p      on sp.PinID      = p.PinID "
+             . "LEFT JOIN pins p      ON sp.PinID      = p.PinID "
              . "WHERE ns.UserID = '$UserID'   AND "
                    . "ns.NodeID = '$NodeID' "
              . "ORDER BY ns.ChildID";
@@ -72,17 +72,25 @@ class DbHelper {
     public function querySensor($UserID, $NodeID, $ChildID){
         $sql = "SELECT ns.ChildID "
              . "FROM node_sensors ns "
-             . "INNER JOIN sensors s  on ns.SensorID   = s.SensorID "
+             . "INNER JOIN sensors s ON ns.SensorID   = s.SensorID "
              . "WHERE ns.UserID   = '$UserID'   AND "
                    . "ns.NodeID   = '$NodeID'   AND "
                    . "ns.ChildID  = '$ChildID'";
         return $this->select($sql);
     }
     
-    public function queryPins($UserID, $NodeID, $ChildID){
+    public function queryPossiblePins($sensorID) {
+        $sql = "SELECT sp.PinNumber, p.*
+                FROM sensor_pins sp
+                INNER JOIN pins p ON sp.pinID = p.pinID
+                WHERE sp.sensorID = $sensorID";
+        return $this->select($sql);
+    }
+    
+    public function querySetPins($UserID, $NodeID, $ChildID){
         $sql = "SELECT sp.PinNumber, p.*
                 FROM set_pins sp
-                INNER JOIN pins p on sp.PinID = p.PinID
+                INNER JOIN pins p ON sp.PinID = p.PinID
                 WHERE sp.UserID   ='$UserID'   AND
                       sp.NodeID   ='$NodeID'   AND
                       sp.ChildID  ='$ChildID'";

@@ -11,10 +11,10 @@
  *
  * @author ian
  */
-include_once '../include/PinList.php';
+include_once '../php/PinList.php';
 
 class Sensor {
-    private $ID = NULL;
+    private $sensorID = NULL;
     private $name = NULL;
     private $childID = NULL;
     private $vType = NULL;
@@ -24,11 +24,12 @@ class Sensor {
     private $userID = NULL;
     private $nodeID = NULL;
     
-    function __construct($userID, $nodeID, $childID){
+    function __construct($userID, $nodeID, $childID, $sensorID){
         $this->userID = $userID;
         $this->nodeID = $nodeID;
         $this->childID = $childID;
-        $this->pinList = new PinList($userID, $nodeID, $childID);
+        $this->sensorID = $sensorID;
+        $this->pinList = new PinList($userID, $nodeID, $childID, $sensorID);
     }
     
     function getNote() {
@@ -40,11 +41,11 @@ class Sensor {
     }
 
     function setID($ID){
-        $this->ID = $ID;
+        $this->sensorID = $ID;
     }
     
     function getID(){
-        return $this->ID;
+        return $this->sensorID;
     }
     
     function setName($name){

@@ -6,7 +6,7 @@ and open the template in the editor.
 -->
 <?php
     session_start();
-    include_once '../include/sensorList.php';
+    include_once '../php/sensorList.php';
     if(!isset($_SESSION['USER_ID'])){
         header("Location: /myEasySensors/index.php");
         exit;

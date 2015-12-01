@@ -6,10 +6,10 @@ and open the template in the editor.
 -->
 <?php
     session_start();
-    include_once '../include/NodeList.php';
-    include_once '../include/Node.php';
-    include_once '../include/SensorList.php';
-    include_once '../include/Sensor.php';
+    include_once '../php/NodeList.php';
+    include_once '../php/Node.php';
+    include_once '../php/SensorList.php';
+    include_once '../php/Sensor.php';
     
     var_dump($_POST);
     
@@ -60,13 +60,12 @@ and open the template in the editor.
             case "addNode":
                 $node = new Node($_SESSION['USER_ID'], filter_input(INPUT_POST, 'nodeId'));
                 $node->setNote(filter_input(INPUT_POST, 'notes'));
-                $nodeList->createNode($node);
+                $nodeList->addNode($node);
                 break;
             case "addSensor":
                 $childID = filter_input(INPUT_POST, "childID");
                 $node = $nodeList->findNodeByID($nodeID);
-                $sensor = new Sensor($_SESSION['USER_ID'], $nodeID, $childID);
-                $sensor->setID(filter_input(INPUT_POST, "sensor"));
+                $sensor = new Sensor($_SESSION['USER_ID'], $nodeID, $childID, filter_input(INPUT_POST, "sensor"));
                 $sensor->setNote(filter_input(INPUT_POST, "notes"));
                 $node->addSensor($sensor);
                 break;

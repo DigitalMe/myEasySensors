@@ -11,8 +11,8 @@
  *
  * @author ian
  */
-include_once '../include/DbHelper.php';
-include_once '../include/Node.php';
+include_once '../php/DbHelper.php';
+include_once '../php/Node.php';
 
     
 class NodeList {
@@ -32,18 +32,26 @@ class NodeList {
             foreach ($results as $row){
                 $node = new Node($userID, $row["NodeID"]);
                 $node ->setNote($row["Note"]);
-                $this -> addNode($node);
+                $this -> attachNode($node);
             }
         }
     }
     
-    function createNode($node){
-        if(NULL == ($this->findNodeByID($node->getID()))){
-            $this->db->insertNode($node);
-            $this->addNode($node);
+    function attachNode($node){
+        $sucess = !$this->nodeList->contains($node);
+        if($sucess == TRUE){
+            $this->nodeList->attach($node);
         }
+        return $sucess;
     }
     
+    function addNode($node){
+        if(NULL == ($this->findNodeByID($node->getID()))){
+            $this->db->insertNode($node);
+            $this->attachNode($node);
+        }
+    }
+
     function deleteNode($nodeID) {
         $sucess = FALSE;
         $node = $this->findNodeByID($nodeID);
@@ -54,14 +62,6 @@ class NodeList {
                 $this->nodeList->detach($node);
                 $this->db->deleteNode($node);            
             }
-        }
-        return $sucess;
-    }
-
-    function addNode($node){
-        $sucess = !$this->nodeList->contains($node);
-        if($sucess == TRUE){
-            $this->nodeList->attach($node);
         }
         return $sucess;
     }

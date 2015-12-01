@@ -61,13 +61,21 @@ class Pin {
         return $this->mode;
     }
     
-    function printRow($style){
-        $row = "<tr class='sensor'>";
-//        $row .= "<td>".$this->getNumber()."</td>";
+    function printRow($style, $possiblePins){
+        var_dump($possiblePins);
+        
+        foreach ($possiblePins as $key => $value) {
+            if ($key == $this->getID()){
+                $row .= "<option value='".$value['pinID']."'>".$value['address']."</option>";
+            }
+            
+        }
+/*        $row = "<tr class='sensor'>";
+        $row .= "<td>".$this->getNumber()."</td>";
         $row .= "<td>".$this->getAddress()."</td>";
         $row .= "<td>".$this->getMode()."</td>";
         $row .= "<td>".$this->getType()."</td>";
-        $row .= "</tr>";
+        $row .= "</tr>";*/
         return $row;
     }
 }
