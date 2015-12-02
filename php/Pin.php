@@ -12,37 +12,49 @@
  * @author ian
  */
 class Pin {
-    private $id;
-    private $number;
-    private $address;
+    private $pinNumber;
+    private $selectedSensorPinID;
+    private $allowedAddresses;
     private $type;
     private $mode;
     //put your code here
     function __construct(){
     }
-    
-    function setID($id) {
-        $this->id = $id;
+
+    function getSelectedSensorPinID() {
+        return $this->selectedSensorPinID;
+    }
+
+    function setSelectedSensorPinID() {
+        return $this->selectedSensorPinID;
+    }
+        
+    function setPinNumber($pinNumber){
+        $this->pinNumber = $pinNumber;
     }
     
-    function getID(){
-        return $this->Id;
+    function getPinNumber(){
+        return $this->pinNumber;
     }
     
-    function setNumber($number){
-        $this->number = $number;
+    function getSelectedAddress(){
+        foreach ($this->allowedAddresses as $key => $value) {
+            if ($key == $this->selectedSensorPinID){
+                return $value;
+            }
+        }
     }
     
-    function getNumber(){
-        return $this->number;
+    function addAddress($sensorPinID, $address) {
+        $this->allowedAddresses[$sensorPinID] = $address;
     }
     
-    function setAddress($address){
-        $this->address = $address;
-    }
-    
-    function getAddress(){
-        return $this->address;
+    function deleteAddress($address) {
+        foreach ($this->allowedAddresses as $key => $value) {
+            if ($value == $address){
+                unset($this->allowedAddresses[$key]);
+            }
+        }
     }
     
     function setType($type){
@@ -61,21 +73,12 @@ class Pin {
         return $this->mode;
     }
     
-    function printRow($style, $possiblePins){
-        var_dump($possiblePins);
-        
-        foreach ($possiblePins as $key => $value) {
-            if ($key == $this->getID()){
-                $row .= "<option value='".$value['pinID']."'>".$value['address']."</option>";
-            }
-            
+    function printRow($pin){
+        $row = "<tr><td><select name='setPin_".$this->pinNumber."'>";
+        foreach ($this->allowedAddresses as $sensorPinID => $Address){
+            $row .= "<option value='$sensorPinID'".($sensorPinID == $this->selectedSensorPinID?" selected='selected'":"").">$Address</option>";
         }
-/*        $row = "<tr class='sensor'>";
-        $row .= "<td>".$this->getNumber()."</td>";
-        $row .= "<td>".$this->getAddress()."</td>";
-        $row .= "<td>".$this->getMode()."</td>";
-        $row .= "<td>".$this->getType()."</td>";
-        $row .= "</tr>";*/
+        $row .= "</select></td><td>$this->mode</td><td>$this->type</td></tr>\n";
         return $row;
     }
 }

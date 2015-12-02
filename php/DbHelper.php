@@ -78,15 +78,16 @@ class DbHelper {
     public function querySensorPins($UserID, $NodeID, $ChildID){
         $sql = "SELECT sp.pinNumber, sp.SensorPinID, p.*, IF(IFNULL(setp.SensorPinID, FALSE), TRUE, FALSE) AS SetPin
                 FROM node_sensors ns
-                INNER JOIN sensor_pins sp ON sp.SensorID = ns.SensorID
-                INNER JOIN pins p         ON sp.PinID    = p.PinID
+                INNER JOIN sensor_pins sp ON sp.SensorID    = ns.SensorID
+                INNER JOIN pins p         ON sp.PinID       = p.PinID
                 LEFT  JOIN set_pins setp  ON ns.UserID      = setp.UserID      AND
                                              ns.NodeID      = setp.NodeID      AND
                                              ns.ChildID     = setp.ChildID     AND
                                              sp.SensorPinID = setp.SensorPinID
-                WHERE sp.UserID   ='$UserID'   AND
-                      sp.NodeID   ='$NodeID'   AND
-                      sp.ChildID  ='$ChildID'";
+                WHERE ns.UserID   = $UserID   AND
+                      ns.NodeID   = $NodeID   AND
+                      ns.ChildID  = $ChildID
+                ORDER BY sp.pinNumber, p.address";
         return $this->select($sql);
     }
     
