@@ -93,6 +93,12 @@ class Sensor {
         
     }
     
+    function setSelectedSensorPinID($selectedSensorPinID){
+        foreach ($selectedSensorPinID as $value) {
+            $this->pinList->setSelectedSensorPinID($value);
+        }
+    }
+    
     function addPin($pin){}
     
     function removePin($pin){}

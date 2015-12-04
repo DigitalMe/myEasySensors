@@ -75,7 +75,7 @@ class DbHelper {
         return $this->select($sql);
     }
     
-    public function querySensorPins($UserID, $NodeID, $ChildID){
+    public function querySensorPins($userID, $nodeID, $childID){
         $sql = "SELECT sp.pinNumber, sp.SensorPinID, p.*, IF(IFNULL(setp.SensorPinID, FALSE), TRUE, FALSE) AS SetPin
                 FROM node_sensors ns
                 INNER JOIN sensor_pins sp ON sp.SensorID    = ns.SensorID
@@ -84,9 +84,9 @@ class DbHelper {
                                              ns.NodeID      = setp.NodeID      AND
                                              ns.ChildID     = setp.ChildID     AND
                                              sp.SensorPinID = setp.SensorPinID
-                WHERE ns.UserID   = $UserID   AND
-                      ns.NodeID   = $NodeID   AND
-                      ns.ChildID  = $ChildID
+                WHERE ns.UserID   = $userID   AND
+                      ns.NodeID   = $nodeID   AND
+                      ns.ChildID  = $childID
                 ORDER BY sp.pinNumber, p.address";
         return $this->select($sql);
     }
@@ -104,6 +104,37 @@ class DbHelper {
                          .$sensor->getID().       ", "
                          .$sensor->getChildID().  ", "
                          ."'".$sensor->getNote().     "')";
+        return $this->query($sql);
+    }
+    
+    public function updateSensorSetPin($userID, $nodeID, $childID, $newSensorPinID) {
+        //first query to see if one or more SensorPinIDs are set for that pinNumber
+        //if so delete them
+        //add new SensorPinID
+        $sql = "SELECT setp.SensorPinID
+                FROM node_sensors ns
+                INNER JOIN sensor_pins sp ON sp.SensorID    = ns.SensorID
+                INNER JOIN set_pins setp  ON ns.UserID      = setp.UserID      AND
+                                             ns.NodeID      = setp.NodeID      AND
+                                             ns.ChildID     = setp.ChildID     AND
+                                             sp.SensorPinID = setp.SensorPinID
+                WHERE ns.UserID   = $userID   AND
+                      ns.NodeID   = $nodeID   AND
+                      ns.ChildID  = $childID
+                ORDER BY setp.SensorPinID";
+        $result = $this->select($sql);
+        if (isset($result)){
+            foreach ($result as $row) {
+                $sql = "DELETE FROM set_pins
+                        WHERE UserID   = $userID   AND
+                        NodeID         = $nodeID   AND
+                        ChildID        = $childID  AND
+                        SensorPinID    = ".$row['SensorPinID'];
+                $result = $this->query($sql);
+            }
+        }
+        $sql = "INSERT INTO set_pins VALUES
+                ($userID, $nodeID, $childID, $newSensorPinID)";
         return $this->query($sql);
     }
     

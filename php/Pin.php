@@ -13,7 +13,7 @@
  */
 class Pin {
     private $pinNumber;
-    private $selectedSensorPinID;
+    private $selectedSensorPinID = -1;
     private $allowedAddresses;
     private $type;
     private $mode;
@@ -25,8 +25,8 @@ class Pin {
         return $this->selectedSensorPinID;
     }
 
-    function setSelectedSensorPinID() {
-        return $this->selectedSensorPinID;
+    function setSelectedSensorPinID($selectedSensorPinID) {
+        $this->selectedSensorPinID = $selectedSensorPinID;
     }
         
     function setPinNumber($pinNumber){
@@ -73,7 +73,7 @@ class Pin {
         return $this->mode;
     }
     
-    function printRow($pin){
+    function printRow(){
         $row = "<tr><td><select name='setPin_".$this->pinNumber."'>";
         foreach ($this->allowedAddresses as $sensorPinID => $Address){
             $row .= "<option value='$sensorPinID'".($sensorPinID == $this->selectedSensorPinID?" selected='selected'":"").">$Address</option>";

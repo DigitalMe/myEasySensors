@@ -67,11 +67,13 @@ class PinList {
         
     }
     
-    function changePin($pinId) {
-        
+    function setSelectedSensorPinID($selectedSensorPinID) {
+        //change it on the pin, find pin by id
+        $this->db->updateSensorSetPin($this->userID, $this->nodeID, $this->childID, $selectedSensorPinID);
     }
 
     function deleteAllPins() {
+        //first delete set pins
         $this->db->deleteAllSensorPins($this->userID, $this->nodeID, $this->childID);
     }
     
@@ -88,9 +90,9 @@ class PinList {
             $table .= "</tr>";
         }
         foreach ($this->pinList as $pin) {
-            $table .= $pin->printRow($pin);
+            $table .= $pin->printRow();
         }
-        $table .= "</table><input type='submit' name='submit' value='saveSelectedPins' /></form>";
+        $table .= "</table><input type='hidden' name='childID' value='$this->childID' /><input type='submit' name='submit' value='saveSelectedPins' /></form>";
         return $table;
     }
 }
