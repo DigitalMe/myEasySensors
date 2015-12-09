@@ -8,11 +8,13 @@ and open the template in the editor.
     Author     : z
 */
             
-table, td, th {
-    color:  blue;
+table{
     border: 1px solid black;
     text-align: right;
 }
+
+tr:nth-child(even){background: #CCC}
+tr:nth-child(odd){background: #FFF}
 
 .removeNodeButton, .removeSensorButton {
     background: url(../images/x.png) no-repeat;

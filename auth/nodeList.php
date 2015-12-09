@@ -10,24 +10,13 @@ and open the template in the editor.
     include_once '../php/Node.php';
     include_once '../php/SensorList.php';
     include_once '../php/Sensor.php';
-    
-    var_dump($_POST);
-    
-    $nodeList = new nodeList($_SESSION['USER_ID']);
-    
+        
     if(!isset($_SESSION['USER_ID'])){
         header("Location: /myEasySensors/index.php");
         exit;
     }
 
     function nodeTable($nodeList){
-        $removeButton = array("Image"    => "../images/minus.png",
-                              "Class"    => "minus",
-                              "Listener" => "onClick=(removeNode)");
-        $addButton = array("Image"    => "../images/add.png",
-                           "Class"    => "add",
-                           "Listener" => "onClick=(addNode)");
-        
         $style = array("headers" => TRUE,
                        "details" => "short",
                        "http"    => "./",
@@ -36,13 +25,8 @@ and open the template in the editor.
 
     }
 
-    function addNode($nodeID, $note){
-        $db = new DB();
-        $sql = "INSERT INTO `User_Nodes`(`UserID`, `NodeID`, `Note`) "
-             . "VALUES (" . $_SESSION['USER_ID'] . ", $nodeID, $note)";
-        $db -> select($sql);
-    }
-
+    $nodeList = new nodeList($_SESSION['USER_ID']);
+    
     if(filter_input(INPUT_POST, 'submit')){
         $action = filter_input(INPUT_POST, 'submit');
         $nodeID = filter_input(INPUT_GET, "node");
@@ -61,6 +45,7 @@ and open the template in the editor.
                 $node = new Node($_SESSION['USER_ID'], filter_input(INPUT_POST, 'nodeId'));
                 $node->setNote(filter_input(INPUT_POST, 'notes'));
                 $nodeList->addNode($node);
+                header("Location: /myEasySensors/auth/nodeList.php");
                 break;
             case "addSensor":
                 $childID = filter_input(INPUT_POST, "childID");
@@ -68,6 +53,7 @@ and open the template in the editor.
                 $sensor = new Sensor($_SESSION['USER_ID'], $nodeID, $childID, filter_input(INPUT_POST, "sensor"));
                 $sensor->setNote(filter_input(INPUT_POST, "notes"));
                 $node->addSensor($sensor);
+                header("Location: /myEasySensors/auth/nodeList.php");
                 break;
             default:
                 break;

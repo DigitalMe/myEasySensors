@@ -94,9 +94,7 @@ class Sensor {
     }
     
     function setSelectedSensorPinID($selectedSensorPinID){
-        foreach ($selectedSensorPinID as $value) {
-            $this->pinList->setSelectedSensorPinID($value);
-        }
+        $this->pinList->setSelectedSensorPinID($selectedSensorPinID);
     }
     
     function addPin($pin){}
@@ -129,7 +127,7 @@ class Sensor {
             $addressPath = $style['http'];
             $page = $style['page'];
             $row .= "<td><form method='POST' action='".$style['http'].$page."?node=$this->nodeID&child=".$this->getChildID()."'>"
-                . "<a href='".$addressPath."sensor.php?node=$this->nodeID&child=".$this->getChildID()."'>".$this->getChildID()."</a>"
+                . $this->getChildID()
                 . "<input type='submit' name='submit' value='removeSensor' class='removeSensorButton' />"
              . "</form></td>";
         } else {
@@ -137,7 +135,7 @@ class Sensor {
         }
         $row .= "<td>".$this->getName()."</td>";
         if($style['details'] == "long"){
-            $row .= "<td>".$this->getSType()."</td><td>".$this->getVType()."</td><td>".$this->pinList->printTable($style)."</td>";
+            $row .= "<td>".$this->getSType()."</td><td>".$this->getVType()."</td><td>".$this->pinList->printTable($style)."</td><td>".$this->getNote()."</td>";
         }
         $row .= "</tr>";
         return $row;

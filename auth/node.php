@@ -34,6 +34,7 @@ and open the template in the editor.
                 $sensor = new Sensor($_SESSION['USER_ID'], $nodeID, $childID, filter_input(INPUT_POST, "sensor"));
                 $sensor->setNote(filter_input(INPUT_POST, "notes"));
                 $sensorList->addSensor($sensor);
+                header("Location: /myEasySensors/auth/node.php?node=".$nodeID);
                 break;
             case "saveSelectedPins":
                 $post = filter_input_array(INPUT_POST);
@@ -45,12 +46,13 @@ and open the template in the editor.
                 }
                 $sensor = $sensorList->findSensorById($childID);
                 $sensor->setSelectedSensorPinID($selectedSensorPinID);
+                header("Location: /myEasySensors/auth/node.php?node=".$nodeID);
                 break;
             default:
                 break;
         }
     }
-    var_dump(filter_input_array(INPUT_POST));
+//    var_dump(filter_input_array(INPUT_POST));
 ?>
 <html>
     <head>
@@ -59,8 +61,9 @@ and open the template in the editor.
         <link rel="stylesheet" type="text/css" href="../css/myEasySensors.css">
     </head>
     <body>
+        <a href="nodeList.php">Back</a><br>
         <?php
-        echo $nodeID;
+        echo "Node: ". $nodeID;
         echo $sensorList->printTable($style);
         // put your code here
         ?>

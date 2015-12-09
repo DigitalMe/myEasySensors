@@ -1,6 +1,6 @@
 <?php
     session_start();
-    include('include/dbhelper.php');
+    include('php/dbhelper.php');
     if (!filter_input(INPUT_POST, 'submit')) { //if they didn't come from the login page
     	header("Location: index.php");
 	exit;

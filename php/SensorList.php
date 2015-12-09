@@ -34,6 +34,7 @@ class SensorList {
                 $sensor = new Sensor($userID, $nodeID, $row["ChildID"], $row["SensorID"]);
                 $sensor->setName($row["SensorName"]);
                 $sensor->setType($row["VType"], $row["SType"]);
+                $sensor->setNote($row["Note"]);
                 $this->attachSensor($sensor);
             }
         }
@@ -117,7 +118,7 @@ class SensorList {
         if ($style['headers'] == TRUE) {
             $table .= "<tr><th>Child ID</th><th>Name</th>";
             if ($style['details'] == "long") {
-                $table .= "<th>Sensor Type</th><th>Value Type</th><th>Pins</th>";
+                $table .= "<th>Sensor Type</th><th>Value Type</th><th>Pins</th><th>Notes</th>";
             }
             $table .= "</tr>";
         }

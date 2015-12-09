@@ -51,7 +51,7 @@ class DbHelper {
     }
     
     public function queryNodeSensors($UserID, $NodeID){
-        $sql = "SELECT ns.ChildID, s.* "
+        $sql = "SELECT ns.ChildID, ns.Note, s.* "
              . "FROM node_sensors ns "
              . "INNER JOIN sensors s  ON ns.SensorID   = s.SensorID "
              . "WHERE ns.UserID = '$UserID'   AND "
@@ -103,7 +103,7 @@ class DbHelper {
                          .$sensor->getNodeID().   ", "
                          .$sensor->getID().       ", "
                          .$sensor->getChildID().  ", "
-                         ."'".$sensor->getNote().     "')";
+                         ."'".$sensor->getNote(). "')";
         return $this->query($sql);
     }
     
@@ -133,8 +133,11 @@ class DbHelper {
                 $result = $this->query($sql);
             }
         }
-        $sql = "INSERT INTO set_pins VALUES
-                ($userID, $nodeID, $childID, $newSensorPinID)";
+        $sql = "INSERT INTO set_pins VALUES";
+        foreach ($newSensorPinID as $pinID){
+            $sql .= " ($userID, $nodeID, $childID, $pinID),";
+        }
+        $sql = substr($sql, 0, strlen($sql)-1);
         return $this->query($sql);
     }
     
