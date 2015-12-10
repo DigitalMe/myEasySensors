@@ -128,7 +128,7 @@ class SensorList {
         $table .= "<tr><td colspan='2'><form method='POST' action='" . $style['http'] . $style['page'] . "?node=$this->nodeID'>Child ID:"
                 . $this->printChildIDsSelect()
                 . $this->printSensorSelect()
-                . "<textarea name='notes' rows='3'></textarea><input type='submit' name='submit' value='addSensor' />"
+                . "<br><input type='text' name='notes'></input><input type='submit' name='submit' value='addSensor' />"
                 . "</form></td></tr>";
         $table .="</table>";
         return $table;

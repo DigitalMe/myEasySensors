@@ -69,6 +69,8 @@ and open the template in the editor.
         <link rel="stylesheet" type="text/css" href="../css/myEasySensors.css">
     </head>
     <body>
+        Welcome to myEasySensors <?php $_SESSION['USER_F_NAME'] ?><br>
+        <a href="../userlogin.php?logout=true">Log off</a>
         <?php
         // put your code here
         echo $display_block;

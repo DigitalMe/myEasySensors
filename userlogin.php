@@ -1,8 +1,10 @@
 <?php
     session_start();
     include('php/dbhelper.php');
-    if (!filter_input(INPUT_POST, 'submit')) { //if they didn't come from the login page
-    	header("Location: index.php");
+    if (!filter_input(INPUT_POST, 'submit') || filter_input(INPUT_GET, "logout") == "true") { //if they didn't come from the login page
+    	session_unset();
+        session_destroy(); 
+        header("Location: index.php");
 	exit;
     }
     $db = new dbhelper();

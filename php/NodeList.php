@@ -95,7 +95,7 @@ class NodeList {
             }
         }
         $table .=     "</select>"
-                    . "<textarea name='notes' rows='3'></textarea><input type='submit' name='submit' value='addNode' />"
+                    . "<textarea name='notes' rows='1'></textarea><input type='submit' name='submit' value='addNode' />"
                 . "</form></td><tr>\n";
         $table .="\t\t</table>\n";
         return $table;

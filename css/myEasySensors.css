@@ -9,12 +9,20 @@ and open the template in the editor.
 */
             
 table{
-    border: 1px solid black;
+    border-collapse: collapse;
     text-align: right;
 }
+tr.node > td {
+    padding-top: .5em;
+    padding-bottom: .5em;
+    
+}
 
-tr:nth-child(even){background: #CCC}
-tr:nth-child(odd){background: #FFF}
+tr:nth-child(even){background: lightgrey}
+tr:nth-child(odd){background: #ffffff}
+
+tr.node:nth-child(even){background: lightgoldenrodyellow}
+tr.node:nth-child(odd){background: lemonchiffon}
 
 .removeNodeButton, .removeSensorButton {
     background: url(../images/x.png) no-repeat;

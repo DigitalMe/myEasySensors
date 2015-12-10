@@ -35,6 +35,11 @@ class DbHelper {
         return $results;
     }
     
+    public function queryEmail($email) {
+        $sql = "SELECT firstname, lastname FROM users WHERE email = '$email'";
+        return $this->select($sql);
+    }
+
     public function queryUserLogin($userName, $password) {
         $sql = "SELECT * FROM Users "
              . "WHERE email = '$userName' AND "
@@ -89,6 +94,11 @@ class DbHelper {
                       ns.ChildID  = $childID
                 ORDER BY sp.pinNumber, p.address";
         return $this->select($sql);
+    }
+    
+    public function insertUser($userName, $password, $firstname, $lastname, $email) {
+        $sql = "INSERT INTO users VALUES(NULL, '$userName', PASSWORD('$password'), '$firstname', '$lastname', '$email')";
+        return $this->query($sql);
     }
     
     public function insertNode($node) {

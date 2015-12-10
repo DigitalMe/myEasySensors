@@ -61,6 +61,7 @@ and open the template in the editor.
         <link rel="stylesheet" type="text/css" href="../css/myEasySensors.css">
     </head>
     <body>
+        <a href="../userlogin.php?logout=true">Log off</a><br>
         <a href="nodeList.php">Back</a><br>
         <?php
         echo "Node: ". $nodeID;
