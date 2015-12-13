@@ -84,7 +84,7 @@ class PinList {
     function printTable ($style){
         $style['headers'] = FALSE;
        
-        $table = "<form method='POST' action='".$style['http'].$style['page']."?node=$this->nodeID'><table class='pinList'>";
+        $table = "<form method='POST' action='".$style['http'].$style['page']."?node=$this->nodeID' id='child$this->childID'><table class='pinList'>";
         if ($style['headers'] == TRUE){
             $table .= "<tr><th>Adress</th><th>Mode</th><th>Type</th>";
             $table .= "</tr>";
@@ -92,7 +92,7 @@ class PinList {
         foreach ($this->pinList as $pin) {
             $table .= $pin->printRow();
         }
-        $table .= "</table><input type='hidden' name='childID' value='$this->childID' /><input type='submit' name='submit' value='saveSelectedPins' /></form>";
+        $table .= "</table><input type='hidden' name='childID' value='$this->childID' /><span id='status$this->childID'></span><button type='button' name='submit' onclick='setSensorPins($this->childID)'>Save Pins</button></form>";
         return $table;
     }
 }
